@@ -233,11 +233,23 @@ class SuperqueensNode(Node):
             children : list of Nodes
                 The list of child nodes.
         """
-        # TODO: add your code here
         # You should use self.queen_positions and self.n to produce children.
         # Don't forget to create a new queen_positions list for each child.
         # You can use copy.deepcopy function from the standard library.
-        pass
+        children = []
+        y_occupied = []
+        x_now = len(self.queen_positions)
+        for position in self.queen_positions:
+            y, _ = position
+            y_occupied.append(y)
+
+        for i in range(self.n):
+            if i not in y_occupied:
+                new_queen_position = copy.deepcopy(self.queen_positions)
+                new_queen_position.append((i, x_now))
+                children.append(SuperqueensNode(parent=self, g=self.g, n=self.n, queen_positions=new_queen_position))
+
+        return children
 
     def is_goal(self):
         """Decides whether all the queens are placed on the board.

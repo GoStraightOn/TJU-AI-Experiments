@@ -247,9 +247,26 @@ class SuperqueensNode(Node):
             is_goal : bool
                 True if all the queens are placed on the board, False otherwise.
         """
+
         # You should use self.queen_positions and self.n to decide.
-        # TODO: add your code here
-        pass
+        # def meet_the_hard_condition(position1, position2):
+        #     # x, y may equals zero, add 1
+        #     y, x = position1
+        #     another_y, another_x = position2
+        #     print(y - another_y, " ", x - another_x)
+        #     return not (y == another_y or x == another_x or y - another_y == x - another_x)
+
+        goaled = True
+        # print(len(self.queen_positions), self.n)
+        if len(self.queen_positions) != self.n:
+            goaled = False
+
+        for i, position in enumerate(self.queen_positions):
+            y, x = position
+            if y >= self.n or x >= self.n:
+                goaled = False
+
+        return goaled
 
     def evaluate_heuristic(self):
         """Heuristic function h(n) that estimates the minimum number of conflicts required to reach the final state.

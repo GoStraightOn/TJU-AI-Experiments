@@ -39,13 +39,17 @@ def Astar(root):
     # You should consider the states evaluated and the ones in the fringe to avoid repeated calculation in 5. above.
     # You can compare two node states by node1.state == node2.state
     open_set = [root]
+    close_set = []
     while open_set:
         open_set.sort(key=lambda node: node.f)
         cur = open_set[0]
         open_set.remove(cur)
         if cur.is_goal():
             return cur.get_path()
+        elif cur in close_set:
+            continue
         else:
+            close_set.append(cur)
             open_set.extend(cur.generate_children())
 
     return None

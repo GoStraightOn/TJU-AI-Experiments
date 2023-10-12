@@ -128,7 +128,6 @@ class FifteensNode(Node):
                 The heuristic value for this state.
         """
 
-        # TODO: add your code here
         # You may want to use self.board here.
         heuristic = 0
         for i in range(len(self.board)):
@@ -136,7 +135,13 @@ class FifteensNode(Node):
                 if self.board[i][j] == 0:
                     continue
                 if self.board[i][j] != len(self.board[i]) * i + j + 1:
-                    heuristic += 1
+                    # heuristic += 1
+                    # If board[i][j] == num, and num should be placed in board[m][n],
+                    # then heuristic += abs(m-i)+abs(n-j)
+                    num = self.board[i][j]
+                    target_x = num / len(self.board)
+                    target_y = num % len(self.board)
+                    heuristic += abs(target_x - i) + abs(target_y - j)
         return heuristic
 
     def _get_state(self):
@@ -240,14 +245,17 @@ class SuperqueensNode(Node):
         y_occupied = []
         x_now = len(self.queen_positions)
         for position in self.queen_positions:
-            y, _ = position
-            y_occupied.append(y)
+            had_y, _ = position
+            y_occupied.append(had_y)
 
         for i in range(self.n):
+            # hard condition: not in same rows or same columns
             if i not in y_occupied:
-                new_queen_position = copy.deepcopy(self.queen_positions)
-                new_queen_position.append((i, x_now))
-                children.append(SuperqueensNode(parent=self, g=self.g, n=self.n, queen_positions=new_queen_position))
+                new_queen_positions = copy.deepcopy(self.queen_positions)
+                new_position = (i, x_now)
+                new_queen_positions.append(new_position)
+                children.append(SuperqueensNode(parent=self, g=self.g, n=self.n,
+                                                queen_positions=new_queen_positions))
 
         return children
 
@@ -289,8 +297,20 @@ class SuperqueensNode(Node):
                 The heuristic value for this state.
         """
         # If you want to design a heuristic for this problem, you should use self.queen_positions and self.n.
-        # TODO: add your code here (optional)
-        return 0
+        if len(self.queen_positions) == 0:
+            return self.g
+        child_position = self.queen_positions[len(self.queen_positions) - 1]
+        new_g = self.g
+        y, x = child_position
+        for position_i in self.queen_positions:
+            y_i, x_i = position_i
+            if y == y_i and x == x_i:
+                continue
+            # L/\
+            dy, dx = abs(y - y_i), abs(x - x_i)
+            new_g += 1 if (dy == dx) else 0
+            new_g += 1 if (dx == 2 and dy == 1) or (dx == 1 and dy == 2) else 0
+        return new_g
 
     def _get_state(self):
         """Returns an hashable representation of this search state.

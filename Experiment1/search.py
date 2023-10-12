@@ -40,11 +40,17 @@ def Astar(root):
     # You can compare two node states by node1.state == node2.state
     open_set = [root]
     close_set = []
+    # ans = None
     while open_set:
         open_set.sort(key=lambda node: node.f)
+        # for item in open_set:
+        #     print(item.f, end=" ")
+        # print("\n")
         cur = open_set[0]
         open_set.remove(cur)
         if cur.is_goal():
+            # if ans is None or cur.f < ans.f:
+            #     ans = cur
             return cur.get_path()
         elif cur in close_set:
             continue
@@ -52,4 +58,5 @@ def Astar(root):
             close_set.append(cur)
             open_set.extend(cur.generate_children())
 
+    # return ans.get_path() if ans is not None else None
     return None

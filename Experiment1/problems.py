@@ -276,11 +276,11 @@ class SuperqueensNode(Node):
         #     print(y - another_y, " ", x - another_x)
         #     return not (y == another_y or x == another_x or y - another_y == x - another_x)
 
-        goaled = True
         # print(len(self.queen_positions), self.n)
         if len(self.queen_positions) != self.n:
-            goaled = False
+            return False
 
+        goaled = True
         for i, position in enumerate(self.queen_positions):
             y, x = position
             if y >= self.n or x >= self.n:
